@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% block title %}ChazeFashion - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero min-h-[60vh] bg-gradient-to-r from-[#0f2027] via-[#2c5364] to-[#232526] shadow-2xl rounded-b-3xl border-b-4 border-cyan-400">
+    <div class="hero-content text-center text-cyan-200">
+        <div class="max-w-md mx-auto">
+            <h1 class="mb-5 text-5xl font-extrabold tracking-widest" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif; text-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;">Welcome to <span class="text-pink-400">ChazeFashion</span></h1>
+            <p class="mb-5 text-lg font-medium text-cyan-100" style="text-shadow: 0 0 6px #00fff7;">Enter the future of fashion. Neon trends, digital vibes, and cyber style await you.</p>
+            <a href="{% url 'product_list' %}" class="btn btn-cyber px-8 py-3 text-lg font-bold shadow-lg" style="background: linear-gradient(90deg,#00fff7,#ff00cc); color: #232526; border: none; box-shadow: 0 0 10px #00fff7, 0 0 20px #ff00cc;">Shop Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Cart Section (only for authenticated users) -->
+{% if user.is_authenticated %}
+<div class="container mx-auto my-10">
+    <div class="bg-gradient-to-r from-[#232526] via-[#0f2027] to-[#2c5364] shadow-2xl rounded-2xl p-8 border-2 border-pink-500" style="box-shadow: 0 0 20px #00fff7, 0 0 40px #ff00cc;">
+        <h2 class="text-3xl font-extrabold mb-6 flex items-center gap-2 text-pink-400" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif; text-shadow: 0 0 8px #ff00cc;">
+            <i class="fas fa-shopping-cart"></i> Your Cart
+        </h2>
+        {% if cart_items and cart_count > 0 %}
+            <div class="mb-2 text-cyan-200">🛒 <span class="font-semibold text-green-400">{{ cart_count }}</span> item{{ cart_count|pluralize }} in cart</div>
+            <div class="mb-6 text-xl text-cyan-100">💰 Total: <span class="font-bold text-pink-400">${{ cart_total }}</span></div>
+            <div class="overflow-x-auto mb-6">
+                <table class="w-full text-cyan-100 text-lg" style="background: rgba(20,30,40,0.7); border-radius: 12px;">
+                    <thead>
+                        <tr style="background: rgba(0,255,247,0.1);">
+                            <th class="px-4 py-2 text-left font-bold text-cyan-300">Product</th>
+                            <th class="px-4 py-2 text-left font-bold text-cyan-300">Quantity</th>
+                            <th class="px-4 py-2 text-left font-bold text-cyan-300">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr class="hover:bg-[#1a1f2b] transition">
+                            <td class="px-4 py-2">{{ item.product.pr_name }}</td>
+                            <td class="px-4 py-2 text-green-400">{{ item.quantity }}</td>
+                            <td class="px-4 py-2 text-pink-400">${{ item.product.pr_price|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'cart' %}" class="btn btn-cyber px-6 py-2 text-lg font-bold" style="background: linear-gradient(90deg,#00fff7,#ff00cc); color: #232526; border: none; box-shadow: 0 0 10px #00fff7, 0 0 20px #ff00cc;">View Full Cart</a>
+        {% else %}
+            <div class="text-cyan-400 text-lg flex items-center gap-2"><i class="fas fa-info-circle"></i> Your cart is empty.</div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Categories Section -->
+<div class="py-16 bg-gradient-to-r from-[#232526] via-[#0f2027] to-[#2c5364] border-t-4 border-cyan-400">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-extrabold text-center mb-12 text-cyan-300 tracking-widest" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif; text-shadow: 0 0 8px #00fff7;">Shop by Category</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+            <div class="card bg-[#181c24] border-2 border-cyan-400 shadow-xl hover:scale-105 transition-transform" style="box-shadow: 0 0 10px #00fff7;">
+                <figure class="px-10 pt-10">
+                    <div class="avatar placeholder">
+                        <div class="bg-cyan-900 rounded-full w-24 flex items-center justify-center border-2 border-pink-400">
+                            <span class="text-3xl text-cyan-200">👨</span>
+                        </div>
+                    </div>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title text-cyan-300 font-extrabold" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Men</h2>
+                    <p class="text-sm text-cyan-100">Stylish clothing for men</p>
+                    <div class="card-actions">
+                        <a href="{% url 'product_list' %}?category=Men" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#00fff7,#ff00cc); color: #232526; border: none;">Shop Men</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-[#181c24] border-2 border-pink-400 shadow-xl hover:scale-105 transition-transform" style="box-shadow: 0 0 10px #ff00cc;">
+                <figure class="px-10 pt-10">
+                    <div class="avatar placeholder">
+                        <div class="bg-pink-900 rounded-full w-24 flex items-center justify-center border-2 border-cyan-400">
+                            <span class="text-3xl text-pink-200">👩</span>
+                        </div>
+                    </div>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title text-pink-300 font-extrabold" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Women</h2>
+                    <p class="text-sm text-pink-100">Elegant fashion for women</p>
+                    <div class="card-actions">
+                        <a href="{% url 'product_list' %}?category=Women" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#ff00cc,#00fff7); color: #232526; border: none;">Shop Women</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-[#181c24] border-2 border-green-400 shadow-xl hover:scale-105 transition-transform" style="box-shadow: 0 0 10px #00ffae;">
+                <figure class="px-10 pt-10">
+                    <div class="avatar placeholder">
+                        <div class="bg-green-900 rounded-full w-24 flex items-center justify-center border-2 border-cyan-400">
+                            <span class="text-3xl text-green-200">👦</span>
+                        </div>
+                    </div>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title text-green-300 font-extrabold" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Boys</h2>
+                    <p class="text-sm text-green-100">Cool clothes for boys</p>
+                    <div class="card-actions">
+                        <a href="{% url 'product_list' %}?category=Boys" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#00ffae,#00fff7); color: #232526; border: none;">Shop Boys</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-[#181c24] border-2 border-purple-400 shadow-xl hover:scale-105 transition-transform" style="box-shadow: 0 0 10px #a259ff;">
+                <figure class="px-10 pt-10">
+                    <div class="avatar placeholder">
+                        <div class="bg-purple-900 rounded-full w-24 flex items-center justify-center border-2 border-cyan-400">
+                            <span class="text-3xl text-purple-200">👧</span>
+                        </div>
+                    </div>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title text-purple-300 font-extrabold" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Girls</h2>
+                    <p class="text-sm text-purple-100">Pretty dresses for girls</p>
+                    <div class="card-actions">
+                        <a href="{% url 'product_list' %}?category=Girls" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#a259ff,#00fff7); color: #232526; border: none;">Shop Girls</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-[#181c24] border-2 border-yellow-400 shadow-xl hover:scale-105 transition-transform" style="box-shadow: 0 0 10px #ffe600;">
+                <figure class="px-10 pt-10">
+                    <div class="avatar placeholder">
+                        <div class="bg-yellow-900 rounded-full w-24 flex items-center justify-center border-2 border-cyan-400">
+                            <span class="text-3xl text-yellow-200">👶</span>
+                        </div>
+                    </div>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title text-yellow-300 font-extrabold" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Toddler</h2>
+                    <p class="text-sm text-yellow-100">Comfortable baby clothes</p>
+                    <div class="card-actions">
+                        <a href="{% url 'product_list' %}?category=Toddler" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#ffe600,#00fff7); color: #232526; border: none;">Shop Toddler</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="py-16 bg-gradient-to-r from-[#0f2027] via-[#232526] to-[#2c5364] border-t-4 border-pink-400">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-extrabold text-center mb-12 text-pink-400 tracking-widest" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif; text-shadow: 0 0 8px #ff00cc;">Featured Products</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for product in products %}
+            <div class="card bg-[#181c24] border-2 border-cyan-400 shadow-xl hover:scale-105 transition-transform" style="box-shadow: 0 0 10px #00fff7;">
+                <figure class="px-4 pt-4">
+                    {% if product.pr_images %}
+                        <img src="{{ product.pr_images.url }}" alt="{{ product.pr_name }}" class="rounded-xl h-48 w-full object-cover border-4 border-pink-400" style="box-shadow: 0 0 10px #ff00cc;" />
+                    {% else %}
+                        <div class="bg-[#232526] rounded-xl h-48 w-full flex items-center justify-center border-4 border-cyan-400" style="box-shadow: 0 0 10px #00fff7;">
+                            <i class="fas fa-tshirt text-6xl text-cyan-400 opacity-70"></i>
+                        </div>
+                    {% endif %}
+                </figure>
+                <div class="card-body">
+                    <h2 class="card-title text-cyan-200 font-extrabold" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">{{ product.pr_name }}</h2>
+                    <p class="text-sm text-cyan-400">{{ product.pr_cate }}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="text-2xl font-bold text-pink-400">${{ product.pr_price }}</div>
+                        <div class="rating rating-sm">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= product.pr_reviews %}
+                                    <input type="radio" name="rating-{{ product.pr_id }}" class="mask mask-star-2 bg-pink-400" checked disabled />
+                                {% else %}
+                                    <input type="radio" name="rating-{{ product.pr_id }}" class="mask mask-star-2 bg-cyan-400" disabled />
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <a href="{% url 'product_detail' product.pr_id %}" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#00fff7,#ff00cc); color: #232526; border: none;">View Details</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'add_to_cart' product.pr_id %}" class="btn btn-cyber btn-sm" style="background: linear-gradient(90deg,#ff00cc,#00fff7); color: #232526; border: none;">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <div class="text-6xl mb-4 text-cyan-400">👕</div>
+                <h3 class="text-xl font-semibold mb-2 text-cyan-200">No products available</h3>
+                <p class="text-cyan-400">Check back soon for new arrivals!</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if products %}
+        <div class="text-center mt-8">
+            <a href="{% url 'product_list' %}" class="btn btn-cyber btn-lg" style="background: linear-gradient(90deg,#00fff7,#ff00cc); color: #232526; border: none;">View All Products</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="py-16 bg-gradient-to-r from-[#232526] via-[#0f2027] to-[#2c5364] border-t-4 border-cyan-400">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-extrabold text-center mb-12 text-cyan-300 tracking-widest" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif; text-shadow: 0 0 8px #00fff7;">Why Choose ChazeFashion?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center bg-[#181c24] border-2 border-cyan-400 rounded-xl p-8 shadow-xl" style="box-shadow: 0 0 10px #00fff7;">
+                <div class="text-4xl mb-4 text-cyan-400">🚚</div>
+                <h3 class="text-xl font-extrabold mb-2 text-cyan-200" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Fast Delivery</h3>
+                <p class="text-cyan-400">Get your fashion items delivered to your doorstep quickly and safely.</p>
+            </div>
+            <div class="text-center bg-[#181c24] border-2 border-pink-400 rounded-xl p-8 shadow-xl" style="box-shadow: 0 0 10px #ff00cc;">
+                <div class="text-4xl mb-4 text-pink-400">💎</div>
+                <h3 class="text-xl font-extrabold mb-2 text-pink-200" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Quality Products</h3>
+                <p class="text-pink-200">We offer only the highest quality clothing and accessories.</p>
+            </div>
+            <div class="text-center bg-[#181c24] border-2 border-green-400 rounded-xl p-8 shadow-xl" style="box-shadow: 0 0 10px #00ffae;">
+                <div class="text-4xl mb-4 text-green-400">🛡️</div>
+                <h3 class="text-xl font-extrabold mb-2 text-green-200" style="font-family: 'Orbitron', 'Montserrat', 'Arial', sans-serif;">Secure Shopping</h3>
+                <p class="text-green-200">Your security is our priority with safe and secure payment options.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
